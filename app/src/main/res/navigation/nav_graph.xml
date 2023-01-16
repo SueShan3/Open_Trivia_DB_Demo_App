@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/browseFragment">
+
+    <fragment
+        android:id="@+id/browseFragment"
+        android:name="com.example.opentriviadbdemoapp.ui.BrowseFragment"
+        android:label="Browse"
+        tools:layout="@layout/fragment_browse" />
+    <fragment
+        android:id="@+id/catalogFragment"
+        android:name="com.example.opentriviadbdemoapp.ui.CatalogFragment"
+        android:label="Catalog"
+        tools:layout="@layout/fragment_catalog" />
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.example.opentriviadbdemoapp.ui.QuizFragment"
+        android:label="Quiz"
+        tools:layout="@layout/fragment_quiz" />
+
+</navigation>
