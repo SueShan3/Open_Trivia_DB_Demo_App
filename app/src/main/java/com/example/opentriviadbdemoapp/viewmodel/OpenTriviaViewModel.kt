@@ -3,9 +3,7 @@ package com.example.opentriviadbdemoapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.opentriviadbdemoapp.model.CategoryResponse
-import com.example.opentriviadbdemoapp.model.QuestionResponse
-import com.example.opentriviadbdemoapp.model.SessionTokenRequest
+import com.example.opentriviadbdemoapp.model.*
 import com.example.opentriviadbdemoapp.module.Resource
 import com.example.opentriviadbdemoapp.module.getRetroInstance
 import io.reactivex.Observer
@@ -17,6 +15,7 @@ class OpenTriviaViewModel : ViewModel() {
     val categoryList: MutableLiveData<Resource<CategoryResponse>?> = MutableLiveData()
     val sessionToken: MutableLiveData<Resource<SessionTokenRequest>?> = MutableLiveData()
     val questionWithCategory: MutableLiveData<Resource<QuestionResponse>?> = MutableLiveData()
+    val questionCountWithCategory: MutableLiveData<Resource<Catalog>?> = MutableLiveData()
 
     fun getCategoryListObserver(): MutableLiveData<Resource<CategoryResponse>?> {
         return categoryList
@@ -28,6 +27,10 @@ class OpenTriviaViewModel : ViewModel() {
 
     fun getQuestionListByCategoryObserver(): MutableLiveData<Resource<QuestionResponse>?> {
         return questionWithCategory
+    }
+
+    fun getQuestionCountByCategoryObserver(): MutableLiveData<Resource<Catalog>?> {
+        return questionCountWithCategory
     }
 
     fun getCategoryList() {
@@ -94,6 +97,31 @@ class OpenTriviaViewModel : ViewModel() {
 
                 override fun onError(e: Throwable) {
                     questionWithCategory.postValue(null)
+                    Log.d("onError", e.toString())
+                }
+
+                override fun onComplete() {
+
+                }
+
+            })
+    }
+
+    fun getQuestionCountByCategory(category: Int){
+        getRetroInstance().getQuestionCountByCategory(category)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<Catalog>{
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: Catalog) {
+                    questionCountWithCategory.postValue(Resource.success(t))
+                }
+
+                override fun onError(e: Throwable) {
+                    questionCountWithCategory.postValue(null)
                     Log.d("onError", e.toString())
                 }
 
