@@ -14,4 +14,8 @@
     <color name="bottom_nav_bg">#0F52BA</color>
     <color name="bottom_nav_selected_item">#FFFF8F</color>
     <color name="light_grey">#E5E4E2</color>
+
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
+    <color name="golden_yellow">#FFC000</color>
 </resources>
