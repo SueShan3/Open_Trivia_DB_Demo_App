@@ -1,6 +1,7 @@
 package com.example.opentriviadbdemoapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.opentriviadbdemoapp.R
 import com.example.opentriviadbdemoapp.databinding.ActivityMainBinding
-import com.example.opentriviadbdemoapp.module.getRetroInstance
 import com.example.opentriviadbdemoapp.utils.SharedPrefUtils
 import com.example.opentriviadbdemoapp.utils.SharedPrefUtils.Companion.token
 import com.example.opentriviadbdemoapp.utils.Status
@@ -28,12 +28,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getRetroInstance().getSessionToken()
+        openTriviaViewModel.getSessionToken()
         openTriviaViewModel.getSessionTokenObserver().observe(this, Observer {
             when (it?.status) {
                 Status.SUCCESS -> {
                     val sessionToken = it.data?.token
-                    SharedPrefUtils.customSharedPrefs(this).token = sessionToken
+                    if(sessionToken != null){
+                        SharedPrefUtils.customSharedPrefs(this).token = sessionToken
+                        Log.d("SueShan", "Session Token: $sessionToken")
+                    }
+
                 }
                 else -> {}
             }

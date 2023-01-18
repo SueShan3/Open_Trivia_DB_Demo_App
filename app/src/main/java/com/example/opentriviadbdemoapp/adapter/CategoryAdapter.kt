@@ -33,8 +33,9 @@ class CategoryAdapter :
         return categoryList.size
     }
 
-    fun setCategoryList(categoryList: List<Question>){
+    fun setCategoryList(categoryList: List<Question>) {
         this.categoryList = categoryList
         notifyDataSetChanged()
     }
+
 }
