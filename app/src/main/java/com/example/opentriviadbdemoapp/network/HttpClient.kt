@@ -27,4 +27,9 @@ interface HttpClient {
     fun getQuestionCountByCategory(
         @Query("category") category: Int
     ): Observable<Catalog>
+
+    @GET("/api_token.php?command=reset")
+    fun getResetSessionToken(
+        @Query("token") token: String
+    ):Observable<SessionTokenRequest>
 }

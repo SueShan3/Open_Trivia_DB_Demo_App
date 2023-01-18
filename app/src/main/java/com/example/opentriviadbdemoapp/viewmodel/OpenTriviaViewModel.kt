@@ -14,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 class OpenTriviaViewModel : ViewModel() {
     val categoryList: MutableLiveData<Resource<CategoryResponse>?> = MutableLiveData()
     val sessionToken: MutableLiveData<Resource<SessionTokenRequest>?> = MutableLiveData()
+    val resetSessionToken: MutableLiveData<Resource<SessionTokenRequest>?> = MutableLiveData()
     val questionWithCategory: MutableLiveData<Resource<QuestionResponse>?> = MutableLiveData()
     val questionCountWithCategory: MutableLiveData<Resource<Catalog>?> = MutableLiveData()
 
@@ -31,6 +32,10 @@ class OpenTriviaViewModel : ViewModel() {
 
     fun getQuestionCountByCategoryObserver(): MutableLiveData<Resource<Catalog>?> {
         return questionCountWithCategory
+    }
+
+    fun getResetSessionTokenObserver(): MutableLiveData <Resource<SessionTokenRequest>?>{
+        return resetSessionToken
     }
 
     fun getCategoryList() {
@@ -72,6 +77,31 @@ class OpenTriviaViewModel : ViewModel() {
 
                 override fun onError(e: Throwable) {
                     sessionToken.postValue(null)
+                    Log.d("onError", e.toString())
+                }
+
+                override fun onComplete() {
+
+                }
+
+            })
+    }
+
+    fun getResetSessionToken(token: String){
+        getRetroInstance().getResetSessionToken(token)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object: Observer<SessionTokenRequest>{
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: SessionTokenRequest) {
+                    resetSessionToken.postValue(Resource.success(t))
+                }
+
+                override fun onError(e: Throwable) {
+                    resetSessionToken.postValue(null)
                     Log.d("onError", e.toString())
                 }
 
