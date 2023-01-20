@@ -9,7 +9,6 @@
             type="com.example.opentriviadbdemoapp.bindingModel.CatalogBindingModel" />
     </data>
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
 
             <TextView
                 android:id="@+id/category"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_200sdp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
@@ -81,7 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20ssp"
-                android:textColor="@color/yellow"
+                android:textColor="@color/golden_yellow"
+                android:autoSizeTextType="uniform"
                 android:textSize="@dimen/_28ssp"
                 android:text="@{data.totalQuestionCount}"
                 app:layout_constraintEnd_toEndOf="parent"

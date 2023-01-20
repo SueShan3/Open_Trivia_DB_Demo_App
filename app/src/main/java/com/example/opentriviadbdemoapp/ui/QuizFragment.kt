@@ -1,10 +1,12 @@
 package com.example.opentriviadbdemoapp.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,16 +14,24 @@ import androidx.lifecycle.Observer
 import com.example.opentriviadbdemoapp.R
 import com.example.opentriviadbdemoapp.databinding.FragmentQuizBinding
 import com.example.opentriviadbdemoapp.model.Category
+import com.example.opentriviadbdemoapp.model.Question
+import com.example.opentriviadbdemoapp.utils.SharedPrefUtils
+import com.example.opentriviadbdemoapp.utils.SharedPrefUtils.Companion.token
 import com.example.opentriviadbdemoapp.utils.Status
 import com.example.opentriviadbdemoapp.viewmodel.OpenTriviaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val LIST = "list"
+private const val REQUEST_CODE = 1234
 
 class QuizFragment : Fragment() {
 
     private lateinit var dataBinding: FragmentQuizBinding
     private val openTriviaViewModel: OpenTriviaViewModel by viewModel()
+    private lateinit var sessionToken: String
     private var list: List<Category> = listOf()
-
+    private var quizList: List<Question> = ArrayList()
+    private var categoryId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +45,60 @@ class QuizFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val token = SharedPrefUtils.customSharedPrefs(requireContext()).token
+
+        if(token != null){
+            sessionToken = token
+        } else{
+            return
+        }
+
+        loadCategoryListApi()
+
+        with(dataBinding.spinnerCategory) {
+            adapter = ArrayAdapter(
+                context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, list
+            )
+
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    if (p2 > 0) {
+                        categoryId = list[p2 - 1].id
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                }
+            }
+        }
+
+        openTriviaViewModel.getQuestionListByCategoryObserver().observe(viewLifecycleOwner, Observer{
+            when(it?.status){
+                Status.SUCCESS ->{
+                    val questionList = it.data?.results
+
+                    if(!questionList.isNullOrEmpty()){
+                        quizList = questionList
+                    }
+
+                    dataBinding.loading.visibility = View.GONE
+
+//                    val intent = Intent(requireContext(), StartQuizActivity::class.java)
+//                    intent.putParcelableArrayListExtra(LIST, ArrayList(quizList))
+//                    startActivity(intent)
+                    startActivityForResult(StartQuizActivity.start(requireContext(), ArrayList(quizList)), REQUEST_CODE)
+                }
+                else -> {}
+            }
+        })
+
+        dataBinding.nextBtn.setOnClickListener {
+            openTriviaViewModel.getQuestionByCategory(sessionToken, categoryId, 10)
+            dataBinding.loading.visibility = View.VISIBLE
+        }
+    }
+
+    private fun loadCategoryListApi() {
         openTriviaViewModel.getCategoryList()
         openTriviaViewModel.getCategoryListObserver().observe(viewLifecycleOwner, Observer {
             when (it?.status) {
@@ -59,10 +123,15 @@ class QuizFragment : Fragment() {
                 else -> {}
             }
         })
+    }
 
-        //TODO: After selected category, click next btn and pass category id to startQuizActivity
-        dataBinding.nextBtn.setOnClickListener {
-            startActivity(Intent(activity, StartQuizActivity::class.java))
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){
+            val totalScore = data?.getStringExtra("data")
+
+            dataBinding.cvQuizResult.visibility = View.VISIBLE
+            dataBinding.totalCorrect.text = totalScore
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.opentriviadbdemoapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.opentriviadbdemoapp.databinding.CategoryListBinding
 import com.example.opentriviadbdemoapp.model.Question
@@ -23,7 +24,8 @@ class CategoryAdapter :
         val newList = categoryList[position]
 
         with(holder.binding) {
-            question.text = newList.question
+            question.text =
+                HtmlCompat.fromHtml(newList.question!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
             difficulty.text = newList.difficulty
             type.text = newList.type
         }
@@ -34,8 +36,12 @@ class CategoryAdapter :
     }
 
     fun setCategoryList(categoryList: List<Question>) {
-        this.categoryList = categoryList
+        this.categoryList += categoryList
         notifyDataSetChanged()
     }
 
+    fun updateChangedCategoryList(categoryList: List<Question>) {
+        this.categoryList = categoryList
+        notifyDataSetChanged()
+    }
 }

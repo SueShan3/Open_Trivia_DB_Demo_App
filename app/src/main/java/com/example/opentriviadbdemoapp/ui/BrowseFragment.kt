@@ -119,7 +119,12 @@ class BrowseFragment : Fragment() {
                         if (!caList.isNullOrEmpty()) {
                             categoryList = caList
                         }
-                        updateAdapter()
+
+                        if(mIsRefresh){
+                            adapter.updateChangedCategoryList(categoryList)
+                        }else{
+                            adapter.setCategoryList(categoryList)
+                        }
 
                         endlessListener?.hasMorePages(caList?.count()!! >= TAKE)
                         endlessListener?.onLoadMoreComplete()
@@ -157,10 +162,6 @@ class BrowseFragment : Fragment() {
             })
     }
 
-    private fun updateAdapter() {
-        adapter.setCategoryList(categoryList)
-    }
-
     private fun loadCategoryApi() {
         openTriviaViewModel.getCategoryList()
         openTriviaViewModel.getCategoryListObserver().observe(viewLifecycleOwner, Observer {
@@ -189,7 +190,10 @@ class BrowseFragment : Fragment() {
         })
     }
 
+    private var mIsRefresh = true
+
     private fun getQuestionByCategory(token: String, id: Int, isRefresh: Boolean) {
+        mIsRefresh = isRefresh
         if(!isRefresh){
             val leftTotalQuestionCount = totalQuestion - adapter.itemCount
             var actualTake = TAKE

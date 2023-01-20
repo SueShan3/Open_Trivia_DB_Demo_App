@@ -7,4 +7,6 @@
     <string name="time_limit">Time limit is One minutes.</string>
     <string name="select_category">Select category:</string>
     <string name="next">Next</string>
+    <string name="question">Question:</string>
+    <string name="result_info">Below are your quiz result. Click here to view more details on each questions.</string>
 </resources>

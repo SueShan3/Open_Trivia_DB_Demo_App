@@ -18,10 +18,4 @@
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
     <color name="golden_yellow">#FFC000</color>
-    <color name="yellow">#FFFF00</color>
-
-    <color name="placeholder_grey">#AAADC4</color>
-    <color name="placeholder_grey_20">#33AAADC4</color>
-
-    <color name="colorHalfTransparentGrey">#80888888</color>
 </resources>

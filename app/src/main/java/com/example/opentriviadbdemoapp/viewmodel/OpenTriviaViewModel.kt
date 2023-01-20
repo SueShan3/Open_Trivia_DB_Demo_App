@@ -3,20 +3,26 @@ package com.example.opentriviadbdemoapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.opentriviadbdemoapp.model.*
+import com.example.opentriviadbdemoapp.model.Catalog
+import com.example.opentriviadbdemoapp.model.CategoryResponse
+import com.example.opentriviadbdemoapp.model.QuestionResponse
+import com.example.opentriviadbdemoapp.model.SessionTokenRequest
 import com.example.opentriviadbdemoapp.module.Resource
-import com.example.opentriviadbdemoapp.module.getRetroInstance
+import com.example.opentriviadbdemoapp.network.HttpClient
+import io.reactivex.Observable
 import io.reactivex.Observer
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class OpenTriviaViewModel : ViewModel() {
+class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
     val categoryList: MutableLiveData<Resource<CategoryResponse>?> = MutableLiveData()
     val sessionToken: MutableLiveData<Resource<SessionTokenRequest>?> = MutableLiveData()
     val resetSessionToken: MutableLiveData<Resource<SessionTokenRequest>?> = MutableLiveData()
     val questionWithCategory: MutableLiveData<Resource<QuestionResponse>?> = MutableLiveData()
-    val questionCountWithCategory: MutableLiveData<Resource<Catalog>?> = MutableLiveData()
+    val questionCountWithCategoryID: MutableLiveData<Resource<Catalog>?> = MutableLiveData()
+    val questionCountList: MutableLiveData<Resource<List<Catalog>>?> = MutableLiveData()
 
     fun getCategoryListObserver(): MutableLiveData<Resource<CategoryResponse>?> {
         return categoryList
@@ -31,7 +37,11 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getQuestionCountByCategoryObserver(): MutableLiveData<Resource<Catalog>?> {
-        return questionCountWithCategory
+        return questionCountWithCategoryID
+    }
+
+    fun getQuestionCountListByCategoryObserver(): MutableLiveData<Resource<List<Catalog>>?> {
+        return questionCountList
     }
 
     fun getResetSessionTokenObserver(): MutableLiveData <Resource<SessionTokenRequest>?>{
@@ -39,7 +49,7 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getCategoryList() {
-        getRetroInstance().getCategory()
+        httpClient.getCategory()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<CategoryResponse> {
@@ -63,7 +73,7 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getSessionToken() {
-        getRetroInstance().getSessionToken()
+        httpClient.getSessionToken()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<SessionTokenRequest> {
@@ -88,7 +98,7 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getResetSessionToken(token: String){
-        getRetroInstance().getResetSessionToken(token)
+        httpClient.getResetSessionToken(token)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: Observer<SessionTokenRequest>{
@@ -113,7 +123,7 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getQuestionByCategory(token: String, category: Int, amount: Int) {
-        getRetroInstance().getQuestionByCategory(token, category, amount)
+        httpClient.getQuestionByCategory(token, category, amount)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<QuestionResponse> {
@@ -138,7 +148,7 @@ class OpenTriviaViewModel : ViewModel() {
     }
 
     fun getQuestionCountByCategory(category: Int){
-        getRetroInstance().getQuestionCountByCategory(category)
+        httpClient.getQuestionCountByCategory(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : Observer<Catalog>{
@@ -147,16 +157,55 @@ class OpenTriviaViewModel : ViewModel() {
                 }
 
                 override fun onNext(t: Catalog) {
-                    questionCountWithCategory.postValue(Resource.success(t))
+                    questionCountWithCategoryID.postValue(Resource.success(t))
                 }
 
                 override fun onError(e: Throwable) {
-                    questionCountWithCategory.postValue(null)
+                    questionCountWithCategoryID.postValue(null)
                     Log.d("onError", e.toString())
                 }
 
                 override fun onComplete() {
 
+                }
+
+            })
+    }
+
+    fun getCatalogByCategory(){
+        // Call API to get categories list
+        httpClient.getCategory()
+        // Iterate and convert into Observable<Category>, from Observable<CategoryResponse>
+        .flatMap {
+            Observable.fromIterable(it.triviaCategories)
+        }
+        .flatMap(
+            {
+                // Call API to get catalog based on the categoryID
+                httpClient.getQuestionCountByCategory(it.id)
+            },
+                // Assigning category name into catalog.categoryName
+            { category, catalog->
+                catalog.categoryName = category.name
+                return@flatMap catalog
+            }
+        )
+            // Convert it from Observable<Catalog> to Observable<List<Catalog>>
+            .toList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object: SingleObserver<List<Catalog>>{
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onSuccess(t: List<Catalog>) {
+                    questionCountList.postValue(Resource.success(t))
+                }
+
+                override fun onError(e: Throwable) {
+                    questionCountList.postValue(null)
+                    Log.d("onError", e.toString())
                 }
 
             })
