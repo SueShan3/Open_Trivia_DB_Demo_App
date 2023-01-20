@@ -14,45 +14,45 @@
             android:layout_marginTop="@dimen/_6sdp"
             android:background="?selectableItemBackgroundBorderless"
             android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_close"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/quiz_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginStart="@dimen/_8sdp"
-            android:textSize="@dimen/_14ssp"
-            tools:text="5/10"
+            android:layout_marginTop="@dimen/_12sdp"
             android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-        
+            tools:text="5/10" />
+
         <TextView
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
-            android:textSize="@dimen/_20ssp"
-            tools:text="00:55"
             android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="@dimen/_20ssp"
             app:layout_constraintEnd_toStartOf="@+id/close_btn"
-            app:layout_constraintStart_toEndOf="@id/quiz_no"/>
+            app:layout_constraintStart_toEndOf="@id/quiz_no"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="00:55" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_40sdp"
             app:cardElevation="@dimen/_3sdp"
             app:cardUseCompatPadding="true"
             app:contentPadding="@dimen/_10sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timer">
+            app:layout_constraintTop_toBottomOf="@id/timer"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -66,28 +66,28 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:text="@string/question"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
-                    tools:text="What is the name given to Indian food cooked over charcoal in a clay oven?"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/difficulty"/>
+                    app:layout_constraintTop_toBottomOf="@id/difficulty"
+                    tools:text="What is the name given to Indian food cooked over charcoal in a clay oven?" />
 
                 <TextView
                     android:id="@+id/difficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_6sdp"
-                    tools:text="Medium"
-                    android:textColor="@color/black"
                     android:background="@drawable/custom_round_rectangle"
-                    tools:backgroundTint="@color/golden_yellow"
+                    android:padding="@dimen/_6sdp"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:backgroundTint="@color/golden_yellow"
+                    tools:text="Medium" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,9 +97,9 @@
             android:id="@+id/choicesLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

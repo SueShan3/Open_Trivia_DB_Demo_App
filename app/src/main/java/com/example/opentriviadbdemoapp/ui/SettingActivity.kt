@@ -7,9 +7,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.opentriviadbdemoapp.R
+import com.example.opentriviadbdemoapp.databinding.ActivitySettingBinding
 import com.example.opentriviadbdemoapp.utils.SharedPrefUtils
 import com.example.opentriviadbdemoapp.utils.SharedPrefUtils.Companion.theme
-import com.example.opentriviadbdemoapp.databinding.ActivitySettingBinding
 
 class SettingActivity : AppCompatActivity() {
 

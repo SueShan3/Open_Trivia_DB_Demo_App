@@ -18,9 +18,9 @@ interface HttpClient {
 
     @GET("/api.php")
     fun getQuestionByCategory(
-        @Query ("token") token: String,
-        @Query ("category") category: Int,
-        @Query ("amount") amount: Int
+        @Query("token") token: String,
+        @Query("category") category: Int,
+        @Query("amount") amount: Int
     ): Observable<QuestionResponse>
 
     @GET("/api_count.php")
@@ -31,5 +31,5 @@ interface HttpClient {
     @GET("/api_token.php?command=reset")
     fun getResetSessionToken(
         @Query("token") token: String
-    ):Observable<SessionTokenRequest>
+    ): Observable<SessionTokenRequest>
 }

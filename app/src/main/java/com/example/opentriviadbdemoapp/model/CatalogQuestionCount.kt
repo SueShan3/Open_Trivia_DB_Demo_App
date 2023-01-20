@@ -2,7 +2,7 @@ package com.example.opentriviadbdemoapp.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CatalogQuestionCount (
+data class CatalogQuestionCount(
     @SerializedName("total_question_count")
     val totalQuestionCount: Int,
     @SerializedName("total_easy_question_count")

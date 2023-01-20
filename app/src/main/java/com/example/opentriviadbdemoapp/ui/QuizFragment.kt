@@ -21,7 +21,8 @@ import com.example.opentriviadbdemoapp.utils.Status
 import com.example.opentriviadbdemoapp.viewmodel.OpenTriviaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val LIST = "list"
+private const val SCORE = "score"
+private const val TIME_LEFT = "timeLeft"
 private const val REQUEST_CODE = 1234
 
 class QuizFragment : Fragment() {
@@ -47,9 +48,9 @@ class QuizFragment : Fragment() {
 
         val token = SharedPrefUtils.customSharedPrefs(requireContext()).token
 
-        if(token != null){
+        if (token != null) {
             sessionToken = token
-        } else{
+        } else {
             return
         }
 
@@ -72,25 +73,28 @@ class QuizFragment : Fragment() {
             }
         }
 
-        openTriviaViewModel.getQuestionListByCategoryObserver().observe(viewLifecycleOwner, Observer{
-            when(it?.status){
-                Status.SUCCESS ->{
-                    val questionList = it.data?.results
+        openTriviaViewModel.getQuestionListByCategoryObserver()
+            .observe(viewLifecycleOwner, Observer {
+                when (it?.status) {
+                    Status.SUCCESS -> {
+                        val questionList = it.data?.results
 
-                    if(!questionList.isNullOrEmpty()){
-                        quizList = questionList
+                        if (!questionList.isNullOrEmpty()) {
+                            quizList = questionList
+                        }
+
+                        dataBinding.loading.visibility = View.GONE
+
+                        startActivityForResult(
+                            StartQuizActivity.start(
+                                requireContext(),
+                                ArrayList(quizList)
+                            ), REQUEST_CODE
+                        )
                     }
-
-                    dataBinding.loading.visibility = View.GONE
-
-//                    val intent = Intent(requireContext(), StartQuizActivity::class.java)
-//                    intent.putParcelableArrayListExtra(LIST, ArrayList(quizList))
-//                    startActivity(intent)
-                    startActivityForResult(StartQuizActivity.start(requireContext(), ArrayList(quizList)), REQUEST_CODE)
+                    else -> {}
                 }
-                else -> {}
-            }
-        })
+            })
 
         dataBinding.nextBtn.setOnClickListener {
             openTriviaViewModel.getQuestionByCategory(sessionToken, categoryId, 10)
@@ -127,11 +131,15 @@ class QuizFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE){
-            val totalScore = data?.getStringExtra("data")
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            val totalScore = data?.getIntExtra(SCORE, 0)
+            val timeLeft = data?.getStringExtra(TIME_LEFT)
 
-            dataBinding.cvQuizResult.visibility = View.VISIBLE
-            dataBinding.totalCorrect.text = totalScore
+            with(dataBinding) {
+                cvQuizResult.visibility = View.VISIBLE
+                totalCorrect.text = getString(R.string.total_correct_score, totalScore.toString())
+                timeRemaining.text = getString(R.string.time_remaining, timeLeft)
+            }
         }
     }
 }

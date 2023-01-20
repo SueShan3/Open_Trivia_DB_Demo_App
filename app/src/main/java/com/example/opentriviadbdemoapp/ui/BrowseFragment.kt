@@ -63,8 +63,8 @@ class BrowseFragment : Fragment() {
 
         openTriviaViewModel.getResetSessionTokenObserver()
             .observe(viewLifecycleOwner, Observer {
-                when(it?.status){
-                    Status.SUCCESS ->{
+                when (it?.status) {
+                    Status.SUCCESS -> {
                         openTriviaViewModel.getQuestionByCategory(sessionToken, categoryId, TAKE)
                     }
                     else -> {}
@@ -76,8 +76,8 @@ class BrowseFragment : Fragment() {
         dataBinding.recyclerView.layoutManager = layoutManager
         dataBinding.recyclerView.adapter = adapter
 
-        with(dataBinding.recyclerView){
-            endlessListener = EndlessListener(layoutManager).also{
+        with(dataBinding.recyclerView) {
+            endlessListener = EndlessListener(layoutManager).also {
                 addOnScrollListener(it)
             }
         }
@@ -120,9 +120,9 @@ class BrowseFragment : Fragment() {
                             categoryList = caList
                         }
 
-                        if(mIsRefresh){
+                        if (mIsRefresh) {
                             adapter.updateChangedCategoryList(categoryList)
-                        }else{
+                        } else {
                             adapter.setCategoryList(categoryList)
                         }
 
@@ -134,8 +134,8 @@ class BrowseFragment : Fragment() {
             })
     }
 
-    internal inner class EndlessListener(layoutManager: LinearLayoutManager):
-    EndlessRecyclerOnScrollListener(layoutManager){
+    internal inner class EndlessListener(layoutManager: LinearLayoutManager) :
+        EndlessRecyclerOnScrollListener(layoutManager) {
         override fun onLoadMore() {
             getQuestionByCategory(sessionToken, categoryId, false)
             dataBinding.bottomLoading.visibility = View.VISIBLE
@@ -154,7 +154,7 @@ class BrowseFragment : Fragment() {
         openTriviaViewModel.getQuestionCountByCategoryObserver()
             .observe(viewLifecycleOwner, Observer {
                 when (it?.status) {
-                    Status.SUCCESS ->{
+                    Status.SUCCESS -> {
                         totalQuestion = it.data?.categoryQuestionCount?.totalQuestionCount ?: 0
                     }
                     else -> {}
@@ -194,7 +194,7 @@ class BrowseFragment : Fragment() {
 
     private fun getQuestionByCategory(token: String, id: Int, isRefresh: Boolean) {
         mIsRefresh = isRefresh
-        if(!isRefresh){
+        if (!isRefresh) {
             val leftTotalQuestionCount = totalQuestion - adapter.itemCount
             var actualTake = TAKE
 
@@ -203,8 +203,7 @@ class BrowseFragment : Fragment() {
             }
 
             openTriviaViewModel.getQuestionByCategory(token, id, actualTake)
-        }else
-        {
+        } else {
             showLoading(true)
             openTriviaViewModel.getResetSessionToken(token)
             getTotalQuestionCountByCategory(categoryId)
@@ -212,8 +211,10 @@ class BrowseFragment : Fragment() {
     }
 
     private fun showLoading(isVisible: Boolean) {
-        dataBinding.swipeToRefresh.isRefreshing = isVisible
-        dataBinding.swipeToRefresh.isEnabled = !isVisible
-        dataBinding.loading.isVisible = isVisible
+        with(dataBinding) {
+            swipeToRefresh.isRefreshing = isVisible
+            swipeToRefresh.isEnabled = !isVisible
+            loading.isVisible = isVisible
+        }
     }
 }

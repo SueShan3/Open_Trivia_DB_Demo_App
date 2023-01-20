@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,15 +14,16 @@ import com.example.opentriviadbdemoapp.databinding.ActivityStartQuizBinding
 import com.example.opentriviadbdemoapp.databinding.ViewChoicesBinding
 import com.example.opentriviadbdemoapp.model.Question
 import com.example.opentriviadbdemoapp.utils.Constants
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 private const val LIST = "list"
+private const val SCORE = "score"
+private const val TIME_LEFT = "timeLeft"
 private const val TIMER_IN_SECOND = 60L
 
 class StartQuizActivity : AppCompatActivity() {
 
-    companion object{
-        fun start(context:Context, quizList: ArrayList<Question>):Intent{
+    companion object {
+        fun start(context: Context, quizList: ArrayList<Question>): Intent {
             val intent = Intent(context, StartQuizActivity::class.java).apply {
                 putParcelableArrayListExtra(LIST, quizList)
             }
@@ -59,10 +59,11 @@ class StartQuizActivity : AppCompatActivity() {
     private var currentQuestionNo: Int = 0
 
     private fun populateNextQuestion(questionNo: Int) {
+        val quizNo = questionNo + 1
         currentQuestionNo = questionNo
         val question = mQuestion[currentQuestionNo]
 
-        dataBinding.quizNo.text = "${questionNo + 1}/${mQuestion.count()}"
+        dataBinding.quizNo.text = "${quizNo}/${mQuestion.count()}"
         dataBinding.question.text =
             HtmlCompat.fromHtml(question.question, HtmlCompat.FROM_HTML_MODE_LEGACY)
         dataBinding.difficulty.text = question.difficulty.capitalize()
@@ -99,16 +100,16 @@ class StartQuizActivity : AppCompatActivity() {
             viewBinding.cvSelectedAnswer.setOnClickListener {
                 mQuestion[questionNo].selectedAnswer = answer
 
-                if(questionNo == mQuestion.size){
-                    totalScore = mQuestion.filter {
-                        it.isAnswerCorrect(it.selectedAnswer)
-                    }.count()
+                totalScore = mQuestion.filter {
+                    it.isAnswerCorrect(it.selectedAnswer)
+                }.count()
 
-                    Log.d("Total","Total Correct: $totalScore" )
-                    intent.putExtra("data", totalScore)
+                if (quizNo == mQuestion.size) {
+                    intent.putExtra(SCORE, totalScore)
+                    intent.putExtra(TIME_LEFT, timeLeft)
                     setResult(RESULT_OK, intent)
                     finish()
-                }else {
+                } else {
                     dataBinding.choicesLayout.removeAllViews()
                     populateNextQuestion(++currentQuestionNo)
                 }
@@ -116,13 +117,12 @@ class StartQuizActivity : AppCompatActivity() {
         }
     }
 
-    private var timeUsed: Long = 0
+    private var timeLeft: String? = null
 
     private var quizTimer = object : CountDownTimer(TIMER_IN_SECOND * 1000, 100) {
         override fun onTick(millisUntilFiished: Long) {
             val seconds = millisUntilFiished / 1000
-            val timeLeft = String.format("%02d:%02d", seconds % 3600 / 60, seconds % 60)
-            timeUsed = (TIMER_IN_SECOND * 1000) - millisUntilFiished
+            timeLeft = String.format("%02d:%02d", seconds % 3600 / 60, seconds % 60)
             dataBinding.timer.text = timeLeft
         }
 

@@ -9,4 +9,21 @@
     <string name="next">Next</string>
     <string name="question">Question:</string>
     <string name="result_info">Below are your quiz result. Click here to view more details on each questions.</string>
+    <string name="time_remaining">Time remaining: %s</string>
+    <string name="total_correct_score">Total correct answered: %s out of 10</string>
+
+    <!--Setting Activity-->
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="enable_dark_mode_instruction">Enable or Disable Dark Mode for the App</string>
+
+    <!--Catalog Fragment-->
+    <string name="total">Total:</string>
+
+    <!--Catalog Binding Model-->
+    <string name="easy">Easy: %s</string>
+    <string name="medium">Medium: %s</string>
+    <string name="hard">Hard: %s</string>
+
+    <!--Loading View-->
+    <string name="loading">Loading</string>
 </resources>

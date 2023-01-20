@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             when (it?.status) {
                 Status.SUCCESS -> {
                     val sessionToken = it.data?.token
-                    if(sessionToken != null){
+                    if (sessionToken != null) {
                         SharedPrefUtils.customSharedPrefs(this).token = sessionToken
                         Log.d("SueShan", "Session Token: $sessionToken")
                     }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -52,20 +51,21 @@ class CatalogFragment : Fragment() {
     }
 
     private fun loadCatalogApi() {
-        openTriviaViewModel.getQuestionCountListByCategoryObserver().observe(viewLifecycleOwner, Observer {
-            when(it?.status){
-                Status.SUCCESS ->{
-                    dataBinding.loading.visibility = View.GONE
-                    val catalogList = it.data
+        openTriviaViewModel.getQuestionCountListByCategoryObserver()
+            .observe(viewLifecycleOwner, Observer {
+                when (it?.status) {
+                    Status.SUCCESS -> {
+                        dataBinding.loading.visibility = View.GONE
+                        val catalogList = it.data
 
-                    if(catalogList!= null){
-                        for(catalog in catalogList){
-                            mSection.add(CatalogItem(catalog))
+                        if (catalogList != null) {
+                            for (catalog in catalogList) {
+                                mSection.add(CatalogItem(catalog))
+                            }
                         }
                     }
+                    else -> {}
                 }
-                else -> {}
-            }
-        })
+            })
     }
 }

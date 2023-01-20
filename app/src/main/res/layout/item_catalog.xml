@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="data"
             type="com.example.opentriviadbdemoapp.bindingModel.CatalogBindingModel" />
@@ -25,9 +26,9 @@
                 android:id="@+id/category"
                 android:layout_width="@dimen/_200sdp"
                 android:layout_height="wrap_content"
+                android:text="@{data.categoryName}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
-                android:text="@{data.categoryName}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="General Knowledge" />
@@ -37,8 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10ssp"
-                android:textSize="@dimen/_10ssp"
                 android:text="@{data.easyQuestionCount}"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category"
                 tools:text="Easy: 128" />
@@ -48,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10ssp"
-                android:textSize="@dimen/_10ssp"
                 android:text="@{data.mediumQuestionCount}"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/easy"
                 tools:text="Medium: 119" />
@@ -59,8 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12ssp"
-                android:textSize="@dimen/_10ssp"
                 android:text="@{data.hardQuestionCount}"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/medium"
                 tools:text="Hard: 65" />
@@ -70,8 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_12sdp"
+                android:text="@string/total"
                 android:textSize="@dimen/_10ssp"
-                android:text="Total:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,10 +81,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20ssp"
-                android:textColor="@color/golden_yellow"
-                android:autoSizeTextType="uniform"
-                android:textSize="@dimen/_28ssp"
                 android:text="@{data.totalQuestionCount}"
+                android:textColor="@color/golden_yellow"
+                android:textSize="@dimen/_28ssp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/total"
                 tools:text="300" />

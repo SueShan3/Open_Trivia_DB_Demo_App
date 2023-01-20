@@ -44,7 +44,7 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
         return questionCountList
     }
 
-    fun getResetSessionTokenObserver(): MutableLiveData <Resource<SessionTokenRequest>?>{
+    fun getResetSessionTokenObserver(): MutableLiveData<Resource<SessionTokenRequest>?> {
         return resetSessionToken
     }
 
@@ -93,15 +93,14 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
                 override fun onComplete() {
 
                 }
-
             })
     }
 
-    fun getResetSessionToken(token: String){
+    fun getResetSessionToken(token: String) {
         httpClient.getResetSessionToken(token)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object: Observer<SessionTokenRequest>{
+            .subscribe(object : Observer<SessionTokenRequest> {
                 override fun onSubscribe(d: Disposable) {
 
                 }
@@ -118,7 +117,6 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
                 override fun onComplete() {
 
                 }
-
             })
     }
 
@@ -143,15 +141,14 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
                 override fun onComplete() {
 
                 }
-
             })
     }
 
-    fun getQuestionCountByCategory(category: Int){
+    fun getQuestionCountByCategory(category: Int) {
         httpClient.getQuestionCountByCategory(category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<Catalog>{
+            .subscribe(object : Observer<Catalog> {
                 override fun onSubscribe(d: Disposable) {
 
                 }
@@ -168,33 +165,32 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
                 override fun onComplete() {
 
                 }
-
             })
     }
 
-    fun getCatalogByCategory(){
+    fun getCatalogByCategory() {
         // Call API to get categories list
         httpClient.getCategory()
-        // Iterate and convert into Observable<Category>, from Observable<CategoryResponse>
-        .flatMap {
-            Observable.fromIterable(it.triviaCategories)
-        }
-        .flatMap(
-            {
-                // Call API to get catalog based on the categoryID
-                httpClient.getQuestionCountByCategory(it.id)
-            },
-                // Assigning category name into catalog.categoryName
-            { category, catalog->
-                catalog.categoryName = category.name
-                return@flatMap catalog
+            // Iterate and convert into Observable<Category>, from Observable<CategoryResponse>
+            .flatMap {
+                Observable.fromIterable(it.triviaCategories)
             }
-        )
+            .flatMap(
+                {
+                    // Call API to get catalog based on the categoryID
+                    httpClient.getQuestionCountByCategory(it.id)
+                },
+                // Assigning category name into catalog.categoryName
+                { category, catalog ->
+                    catalog.categoryName = category.name
+                    return@flatMap catalog
+                }
+            )
             // Convert it from Observable<Catalog> to Observable<List<Catalog>>
             .toList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object: SingleObserver<List<Catalog>>{
+            .subscribe(object : SingleObserver<List<Catalog>> {
                 override fun onSubscribe(d: Disposable) {
 
                 }
@@ -207,7 +203,6 @@ class OpenTriviaViewModel(private val httpClient: HttpClient) : ViewModel() {
                     questionCountList.postValue(null)
                     Log.d("onError", e.toString())
                 }
-
             })
     }
 }

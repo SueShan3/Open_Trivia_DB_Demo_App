@@ -28,8 +28,8 @@
             android:layout_margin="@dimen/_8sdp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/bottomNav"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph" />
 

@@ -14,29 +14,29 @@
             android:id="@+id/theme_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enable Dark Mode"
+            android:text="@string/enable_dark_mode"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_enable_disable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enable or Disable Dark Mode for the App"
+            android:text="@string/enable_dark_mode_instruction"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/theme_dark"/>
-        
+            app:layout_constraintTop_toBottomOf="@id/theme_dark" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/btn_enable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16sdp"
-            app:layout_constraintTop_toTopOf="@+id/theme_dark"
             app:layout_constraintBottom_toBottomOf="@+id/txt_enable_disable"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_enable_disable"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="@+id/theme_dark" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

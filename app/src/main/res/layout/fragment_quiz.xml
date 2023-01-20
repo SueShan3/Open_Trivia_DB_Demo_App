@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -80,17 +81,17 @@
             android:layout_marginEnd="@dimen/_8sdp"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/next_btn"
-            app:layout_constraintTop_toBottomOf="@id/card_view"/>
+            app:layout_constraintTop_toBottomOf="@id/card_view" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_quiz_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
+            android:visibility="gone"
             app:cardElevation="@dimen/_3sdp"
             app:cardUseCompatPadding="true"
             app:contentPadding="@dimen/_8sdp"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/next_btn">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,23 +104,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/result_info"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/time_left"
+                    android:id="@+id/time_remaining"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
-                    android:text="Time remaining: 00:53"
-                    app:layout_constraintTop_toBottomOf="@id/result_info"/>
+                    app:layout_constraintTop_toBottomOf="@id/result_info"
+                    tools:text="Time remaining: 00:53" />
 
                 <TextView
                     android:id="@+id/total_correct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
-                    android:text="Total correct answered: 1 out of 10"
-                    app:layout_constraintTop_toBottomOf="@id/time_left"/>
+                    app:layout_constraintTop_toBottomOf="@id/time_remaining"
+                    tools:text="Total correct answered: 1 out of 10" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

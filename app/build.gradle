@@ -77,8 +77,4 @@ dependencies {
     implementation 'com.xwray:groupie-databinding:2.9.0'
     //SwipeToRefresh
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    //Room database
-    implementation"androidx.room:room-runtime:2.4.3"
-    implementation "androidx.room:room-ktx:2.4.3"
-    kapt"androidx.room:room-compiler:2.4.3"
 }
